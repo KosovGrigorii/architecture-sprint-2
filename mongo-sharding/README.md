@@ -13,7 +13,7 @@ docker compose up -d
 ```shell
 ./scripts/mongo-init.sh
 ```
-# Содержимое скрипта:
+### Содержимое скрипта:
 инициализируем сервер конфигурайций
 ```shell
 docker compose exec -T configSrv mongosh --port 27017 --quiet <<EOF
