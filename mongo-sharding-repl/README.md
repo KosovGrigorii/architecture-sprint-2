@@ -16,6 +16,7 @@ docker compose up -d
 
 ### Содержимое скрипта
 инициализируем сервер конфигурайций
+```shell
 docker compose exec -T configSrv mongosh --port 27017 --quiet <<EOF
 rs.initiate(
   {
@@ -28,7 +29,10 @@ rs.initiate(
 );
 exit();
 EOF
+```
+
 инициализируем шарды базы (объединяя их в группы реплик)
+```shell
 docker compose exec -T mongodb1 mongosh --port 27019 --quiet <<EOF
 rs.initiate({_id: "shard1", members: [
 {_id: 0, host: "mongodb1:27019"},
@@ -46,8 +50,10 @@ rs.initiate({_id: "shard2", members: [
 ]});
 exit(); 
 EOF
+```
 
 инициализируем роутер, создаем коллекцию и заполняем ее данными
+```shell
 docker compose exec -T mongos_router mongosh --port 27018 --quiet <<EOF
 sh.addShard( "shard2/mongodb4:27022");
 sh.addShard( "shard2/mongodb5:27023");
@@ -64,6 +70,7 @@ use somedb
 for(var i = 0; i < 1000; i++) db.helloDoc.insert({age:i, name:"ly"+i})
 exit();
 EOF
+```
 
 ## Как остановить 
 
